@@ -1,4 +1,4 @@
-# **[mern-study-organizer](https://github.com/Belka-S/mern-study-organizer)**
+# **[mern-studyorganizer](https://github.com/Belka-S/mern-studyorganizer)**
 
 - **[react]**https://react.dev/
 - **[normalize.css]**https://www.npmjs.com/package/normalize.css
