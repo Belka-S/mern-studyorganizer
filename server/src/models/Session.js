@@ -12,7 +12,7 @@ const sessionSchema = new Schema(
     expiresAt: {
       type: Date,
       expires: '1d',
-      default: new Date(Date.now() + 24 * 60 * 60 * 1000).toLocaleString(),
+      default: new Date(Date.now() + 24 * 60 * 60 * 1000),
     },
   },
   { versionKey: false, timestamps: true },
