@@ -4,7 +4,7 @@ const { mongooseError } = require('../utils');
 
 const required = [true, 'Required field!'];
 
-const exdate = new Date();
+// const exdate = new Date();  exdate.setDate(exdate.getDate() + 1),
 
 const sessionSchema = new Schema(
   {
@@ -12,8 +12,7 @@ const sessionSchema = new Schema(
     expiresAt: {
       type: Date,
       expires: '1d',
-      default: exdate.setDate(exdate.getDate() + 1),
-      // new Date(Date.now() + 24 * 60 * 60 * 1000)
+      default: new Date(Date.now() + 24 * 60 * 60 * 1000),
     },
   },
   { versionKey: false, timestamps: true },
