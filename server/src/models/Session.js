@@ -12,14 +12,14 @@ const sessionSchema = new Schema(
     expiresAt: {
       type: Date,
       expires: '1d',
-      default: new Date(Date.now() + 24 * 60 * 60 * 1000).toUTCString(),
+      default: new Date(Date.now() + 24 * 60 * 60 * 1000).toLocaleString(),
     },
   },
   { versionKey: false, timestamps: true },
 );
 
 // Add index
-// sessionSchema.index({ createdAt: 1 }, { expireAfterSeconds: 60 });  .toLocaleString()
+// sessionSchema.index({ createdAt: 1 }, { expireAfterSeconds: 60 });
 
 // Change error status
 sessionSchema.post('save', mongooseError);
