@@ -27,9 +27,9 @@ const verifyEmail = ctrlWrapper(async (req, res) => {
   if (!newUser) throw HttpError(403, `Failed to verify ${user.email}`);
 
   // Log in
-  const exdate = new Date();
-  exdate.setDate(exdate.getDate() + 2);
-  const session = await Session.create({ uid: newUser._id, expiresAt: exdate });
+  const expiresAt = new Date();
+  expiresAt.setDate(expiresAt.getDate() + 2);
+  const session = await Session.create({ uid: newUser._id, expiresAt });
 
   const payload = { uid: newUser._id, sid: session._id };
   const accessToken = jwt.sign(payload, TOKEN_ACCESS_SECRET, { expiresIn: '60s' });
