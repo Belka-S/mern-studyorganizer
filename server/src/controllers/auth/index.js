@@ -1,4 +1,3 @@
-const expiresAt = require('./expiresAt');
 const forgotPass = require('./forgotPass');
 const google = require('./google');
 const login = require('./login');
@@ -9,7 +8,6 @@ const resetPass = require('./resetPass');
 const verifyEmail = require('./verifyEmail');
 
 module.exports = {
-  expiresAt,
   forgotPass,
   google,
   login,
