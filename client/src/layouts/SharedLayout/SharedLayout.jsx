@@ -10,7 +10,7 @@ import { themes } from 'styles/themes';
 
 const { xl } = themes.indents;
 const barH = `calc(100vh - ${xl})`;
-export const barW = '55%';
+export const barW = '50%';
 
 const SharedLayout = () => {
   return (
