@@ -40,7 +40,9 @@ const LiElement = ({ el, sortByDate, setSortByDate }) => {
         behavior: 'smooth',
       });
     };
-    scrollOnActive();
+    activeElementEl
+      ? scrollOnActive()
+      : window.scrollTo(0, document.body.scrollHeight);
   }, []);
 
   const handleFavorite = () => {

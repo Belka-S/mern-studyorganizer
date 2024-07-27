@@ -1,3 +1,23 @@
+import { themes } from 'styles/themes';
+
+const { background } = themes.colors;
+
+const markAsRead = message => {
+  document.querySelectorAll('button').forEach(el => {
+    if (el.innerText === message.text) {
+      const activeElementEl = el.closest('li');
+      activeElementEl.style.backgroundColor = background;
+      const scrollOnActive = () => {
+        activeElementEl?.scrollIntoView({
+          block: 'center',
+          behavior: 'smooth',
+        });
+      };
+      scrollOnActive();
+    }
+  });
+};
+
 export const speakText = ({ text, lang, rate = 1, divider = '$*@' }) => {
   const speech = window.speechSynthesis;
   const messageParts = text.split(divider);
@@ -14,6 +34,7 @@ export const speakText = ({ text, lang, rate = 1, divider = '$*@' }) => {
 
     // divide message on parts
     message.onend = () => {
+      if (messageParts.length !== 1) markAsRead(message);
       currentIndex += 1;
       if (currentIndex < messageParts.length) {
         setTimeout(() => {
@@ -51,8 +72,8 @@ export const speakTranslatiot = ({ text, lang, rate = 1, divider = '$*@' }) => {
 
   // divide message on parts
   translation.onend = () => {
+    markAsRead(translation);
     currentIndex += 1;
-
     if (currentIndex < messageParts.length) {
       const currentMsg = messageParts[currentIndex];
       const transLang = currentMsg.split('@±@')[1].substring(0, 2);

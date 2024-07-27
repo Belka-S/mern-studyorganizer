@@ -26,6 +26,11 @@ const Element = ({ el, sortByDate, setSortByDate }) => {
   };
 
   const handleSort = () => {
+    window.scrollTo({
+      left: 0,
+      top: document.body.scrollHeight,
+      behavior: 'smooth',
+    });
     setSortByDate(!sortByDate);
     sortByDate
       ? toast.success('Ascending by Date')
