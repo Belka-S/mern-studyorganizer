@@ -54,7 +54,7 @@ const ElementEditForm = ({ el, isForm, setIsForm }) => {
   }, []);
 
   const onSubmit = data => {
-    dispatch(updateElementThunk({ _id, ...data }));
+    dispatch(updateElementThunk({ _id, lang: user.lang, ...data }));
     setIsForm(false);
   };
 

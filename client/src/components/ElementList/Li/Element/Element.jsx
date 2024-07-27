@@ -21,7 +21,7 @@ const Element = ({ el, sortByDate, setSortByDate }) => {
   };
 
   const speakCaption = () => {
-    const msg = speakText({ text: caption, lang: el.lang });
+    const msg = speakText({ text: caption, lang: el.lang, rate: el.rate });
     msg && toast.error(msg);
   };
 

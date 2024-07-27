@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 
@@ -14,6 +16,20 @@ const AddBtn = () => {
   const dispatch = useDispatch();
   const { user } = useAuth();
   const { activeCluster } = useClusters();
+
+  useEffect(() => {
+    const handleKeyDown = async e => {
+      if (e.key === 'd' && e.metaKey) {
+        e.preventDefault();
+        await addElement();
+      }
+    };
+
+    addEventListener('keydown', handleKeyDown);
+    return () => {
+      removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
 
   const addElement = async e => {
     const text = window.getSelection().toString();
