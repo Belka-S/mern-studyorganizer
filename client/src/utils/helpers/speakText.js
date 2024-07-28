@@ -4,7 +4,7 @@ const { background } = themes.colors;
 
 const markAsRead = message => {
   document.querySelectorAll('button').forEach(el => {
-    if (el.innerText === message.text) {
+    if (el.innerText.trim() === message.text.trim()) {
       const activeElementEl = el.closest('li');
       activeElementEl.style.backgroundColor = background;
       const scrollOnActive = () => {
