@@ -29,7 +29,7 @@ export const speakText = ({ text, lang, rate = 1, divider = '$*@' }) => {
     message.voice = voices[0];
     message.volume = 1; // 0 to 1
     message.rate = rate; // 0.1 to 10
-    message.pitch = 0.1; // 0 to 2
+    // message.pitch = 1; // 0 to 2
     message.text = textToSpeak;
 
     // divide message on parts
