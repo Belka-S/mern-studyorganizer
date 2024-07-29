@@ -3,16 +3,20 @@ import { useDispatch } from 'react-redux';
 
 import { useClusters, useElements } from 'utils/hooks';
 import { fetchElementsThunk } from 'store/element/elementThunks';
-
 import ElementLangBar from 'components/ElementBars/ElementLangBar';
+import { themes } from 'styles/themes';
 
 import LiElement from './Li/LiElement';
 import { List } from './ElementList.styled';
+
+const { background, white } = themes.colors;
 
 const ElementList = () => {
   const dispatch = useDispatch();
   const { activeCluster } = useClusters();
   const { allElements, elementTrash, elementFilter } = useElements();
+
+  const [liColor, setLiColor] = useState(white);
 
   let { elementSelect } = useElements();
   elementSelect = !elementSelect ? [] : elementSelect;
@@ -68,10 +72,14 @@ const ElementList = () => {
           el={element}
           sortByDate={sortByDate}
           setSortByDate={setSortByDate}
+          liColor={liColor}
         />
       ))}
 
-      <ElementLangBar filtredElements={filtredElements} />
+      <ElementLangBar
+        filtredElements={filtredElements}
+        setLiColor={setLiColor}
+      />
     </List>
   );
 };

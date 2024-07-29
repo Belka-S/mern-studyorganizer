@@ -1,12 +1,12 @@
 import { themes } from 'styles/themes';
 
-const { background } = themes.colors;
+const { white } = themes.colors;
 
-const markAsRead = message => {
+const markAsRead = async message => {
   document.querySelectorAll('button').forEach(el => {
     if (el.innerText.trim() === message.text.trim()) {
       const activeElementEl = el.closest('li');
-      activeElementEl.style.backgroundColor = background;
+      activeElementEl.style.backgroundColor = white;
       const scrollOnActive = () => {
         activeElementEl?.scrollIntoView({
           block: 'center',
@@ -18,40 +18,45 @@ const markAsRead = message => {
   });
 };
 
-export const speakText = ({ text, lang, rate = 1, divider = '$*@' }) => {
+export const speakText = ({ text, lang, rate, divider, setLiColor }) => {
   const speech = window.speechSynthesis;
   const messageParts = text.split(divider);
   let currentIndex = 0;
 
-  const speak = textToSpeak => {
-    const message = new SpeechSynthesisUtterance();
-    const voices = speech.getVoices().filter(el => el.lang.includes(lang));
-    message.voice = voices[0];
-    message.volume = 1; // 0 to 1
-    message.rate = rate; // 0.1 to 10
-    // message.pitch = 1; // 0 to 2
-    message.text = textToSpeak;
+  const message = new SpeechSynthesisUtterance();
+  const voices = speech.getVoices().filter(el => el.lang.includes(lang));
+  if (!voices[0]) {
+    return `No ${lang.toUpperCase()} voice available`;
+  }
 
-    // divide message on parts
-    message.onend = () => {
-      if (messageParts.length !== 1) markAsRead(message);
-      currentIndex += 1;
-      if (currentIndex < messageParts.length) {
-        setTimeout(() => {
-          speak(messageParts[currentIndex]);
-        }, messageParts[currentIndex - 1].length * 120);
-      }
-    };
-    if (!voices[0]) {
-      return `No ${lang.toUpperCase()} voice available`;
+  message.voice = voices[0];
+  message.volume = 1; // 0 to 1
+  message.rate = rate; // 0.1 to 10
+  // message.pitch = 1; // 0 to 2
+  message.text = messageParts[0];
+
+  // divide message on parts
+  message.onend = () => {
+    if (messageParts.length !== 1) markAsRead(message);
+    currentIndex += 1;
+    if (currentIndex < messageParts.length) {
+      message.text = messageParts[currentIndex];
+
+      setTimeout(() => {
+        speech.speak(message);
+      }, messageParts[currentIndex - 1].length * 120);
     }
-    speechSynthesis.speak(message);
   };
 
-  speech.speaking ? speech.cancel() : speak(messageParts[0]);
+  if (speech.speaking) {
+    speech.cancel();
+    setLiColor(white);
+  } else {
+    speech.speak(message);
+  }
 };
 
-export const speakTranslatiot = ({ text, lang, rate = 1, divider = '$*@' }) => {
+export const speakTranslation = ({ text, lang, rate, divider, setLiColor }) => {
   const speech = window.speechSynthesis;
   const messageParts = text.split(divider);
   let currentIndex = 0;
@@ -60,19 +65,25 @@ export const speakTranslatiot = ({ text, lang, rate = 1, divider = '$*@' }) => {
 
   const message = new SpeechSynthesisUtterance();
   const voices = speech.getVoices().filter(el => el.lang.includes(lang));
+  if (!voices[0]) {
+    return `No ${lang.toUpperCase()} voice available`;
+  }
   message.voice = voices[0];
   message.rate = rate;
   message.text = currentMsg.split('@±@')[0];
 
   const translation = new SpeechSynthesisUtterance();
   const voicesT = speech.getVoices().filter(el => el.lang.includes(transLang));
+  if (!voicesT[0]) {
+    return `No ${lang.toUpperCase()} voice available`;
+  }
   translation.voice = voicesT[0];
   translation.rate = rate;
   translation.text = currentMsg.split('@±@')[1].substring(2);
 
   // divide message on parts
   translation.onend = () => {
-    markAsRead(translation);
+    markAsRead(message);
     currentIndex += 1;
     if (currentIndex < messageParts.length) {
       const currentMsg = messageParts[currentIndex];
@@ -90,10 +101,12 @@ export const speakTranslatiot = ({ text, lang, rate = 1, divider = '$*@' }) => {
       }, messageParts[currentIndex - 1].length * 80);
     }
   };
-  if (!voices[0]) {
-    return `No ${lang.toUpperCase()} voice available`;
-  }
 
-  speech.speak(message);
-  speech.speak(translation);
+  if (speech.speaking) {
+    speech.cancel();
+    setLiColor(white);
+  } else {
+    speech.speak(message);
+    speech.speak(translation);
+  }
 };

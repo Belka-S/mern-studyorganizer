@@ -12,13 +12,13 @@ import { updateUserThunk } from 'store/auth/authThunks';
 import { updateClusterThunk } from 'store/cluster/clusterThunks';
 import { setActiveCluster } from 'store/cluster/clusterSlice';
 import { languageCodes, rateValues } from 'utils/constants';
-import { speakText, speakTranslatiot } from 'utils/helpers';
+import { speakText, speakTranslation } from 'utils/helpers';
 import { themes } from 'styles/themes';
 
-const { backgroundHoverd: ol, white: b, borderLight: bh } = themes.colors;
+const { background, backgroundHoverd, white, borderLight } = themes.colors;
 const { button } = themes.shadows;
 
-const ElementLangBar = ({ filtredElements }) => {
+const ElementLangBar = ({ filtredElements, setLiColor }) => {
   const dispatch = useDispatch();
   const { user } = useAuth();
   const { activeCluster: ac } = useClusters();
@@ -48,6 +48,7 @@ const ElementLangBar = ({ filtredElements }) => {
   };
 
   const playFiltred = e => {
+    setLiColor(background);
     let textString = '';
     const divider = '$*@';
     for (let i = 0; i < filtredElements.length; i += 1) {
@@ -56,6 +57,7 @@ const ElementLangBar = ({ filtredElements }) => {
     }
 
     const msg = speakText({
+      setLiColor,
       divider,
       text: textString,
       lang: ac.lang,
@@ -67,6 +69,7 @@ const ElementLangBar = ({ filtredElements }) => {
   };
 
   const playTranslated = e => {
+    setLiColor(background);
     let textString = '';
     const divider = '$*@';
     for (let i = 0; i < filtredElements.length; i += 1) {
@@ -74,7 +77,8 @@ const ElementLangBar = ({ filtredElements }) => {
       textString += element + `@±@${lang}` + caption + divider;
     }
 
-    const msg = speakTranslatiot({
+    const msg = speakTranslation({
+      setLiColor,
       divider,
       text: textString,
       lang: ac.lang,
@@ -92,18 +96,18 @@ const ElementLangBar = ({ filtredElements }) => {
         defaultValue={languageCodes.find(el => el.value === ac?.lang)}
         onChange={setClusterLang}
         placeholder="Language..."
-        $ol={ol}
-        $b={b}
-        $bh={bh}
+        $ol={backgroundHoverd}
+        $b={white}
+        $bh={borderLight}
       />
       <Select
         options={rateValues}
         defaultValue={rateValues.find(el => el.value == ac?.rate)}
         onChange={setClusterRate}
         placeholder="Rate..."
-        $ol={ol}
-        $b={b}
-        $bh={bh}
+        $ol={backgroundHoverd}
+        $b={white}
+        $bh={borderLight}
       />
 
       <Button onClick={playFiltred} $s="m" $bs={button}>
@@ -118,17 +122,17 @@ const ElementLangBar = ({ filtredElements }) => {
         options={languageCodes}
         defaultValue={languageCodes.find(el => el.value === user.lang)}
         onChange={setUserLang}
-        $ol={ol}
-        $b={b}
-        $bh={bh}
+        $ol={backgroundHoverd}
+        $b={white}
+        $bh={borderLight}
       />
       <Select
         options={rateValues}
         defaultValue={rateValues.find(el => el.value == user.rate)}
         onChange={setUserRate}
-        $ol={ol}
-        $b={b}
-        $bh={bh}
+        $ol={backgroundHoverd}
+        $b={white}
+        $bh={borderLight}
       />
     </GridWrap>
   );
@@ -138,4 +142,5 @@ export default ElementLangBar;
 
 ElementLangBar.propTypes = {
   filtredElements: PropTypes.object,
+  setLiColor: PropTypes.func,
 };

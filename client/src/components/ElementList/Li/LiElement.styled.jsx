@@ -16,7 +16,7 @@ const baseLiStyle = css`
   align-items: center;
   grid-template-columns: 1fr 25fr 1fr;
 
-  background-color: ${colors.white};
+  background-color: ${({ liColor }) => liColor};
   border-radius: ${indents.xs};
   font-size: 22px;
 `;

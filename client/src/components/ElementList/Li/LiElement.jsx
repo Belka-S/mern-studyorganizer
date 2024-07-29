@@ -22,7 +22,7 @@ import {
 } from './LiElement.styled';
 import ElEditForm from './Element/ElEditForm';
 
-const LiElement = ({ el, sortByDate, setSortByDate }) => {
+const LiElement = ({ el, sortByDate, setSortByDate, liColor }) => {
   const dispatch = useDispatch();
   const { elementTrash, activeElement } = useElements();
   const [isForm, setIsForm] = useState(false);
@@ -68,6 +68,7 @@ const LiElement = ({ el, sortByDate, setSortByDate }) => {
     <Li
       id={active ? 'active-element' : null}
       onClick={() => dispatch(setActiveElement(element))}
+      liColor={liColor}
     >
       <FlexWrap $h="100%" $p="0" $fd="column">
         <LabelFavorite $hovered={favorite}>
@@ -119,4 +120,5 @@ LiElement.propTypes = {
   el: PropTypes.object,
   sortByDate: PropTypes.bool,
   setSortByDate: PropTypes.func,
+  liColor: PropTypes.string,
 };
