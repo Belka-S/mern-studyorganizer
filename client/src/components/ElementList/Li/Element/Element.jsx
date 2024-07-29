@@ -6,12 +6,13 @@ import { useClusters } from 'utils/hooks';
 
 import { GridWrap, Divider, SpeakBtn, Iframe, Audio } from './Element.styled';
 
-const Element = ({ el, sortByDate, setSortByDate }) => {
+const Element = ({ el, sortByDate, setSortByDate, setLiColor }) => {
   const { activeCluster } = useClusters();
   const { element, caption } = el;
 
   const speakElement = async () => {
     const msg = speakText({
+      setLiColor,
       text: element,
       lang: activeCluster.lang,
       rate: activeCluster.rate,
@@ -21,7 +22,12 @@ const Element = ({ el, sortByDate, setSortByDate }) => {
   };
 
   const speakCaption = () => {
-    const msg = speakText({ text: caption, lang: el.lang, rate: el.rate });
+    const msg = speakText({
+      setLiColor,
+      text: caption,
+      lang: el.lang,
+      rate: el.rate,
+    });
     msg && toast.error(msg);
   };
 
@@ -62,4 +68,5 @@ Element.propTypes = {
   setSortByDate: PropTypes.func,
   $active: PropTypes.bool,
   $hovered: PropTypes.bool,
+  setLiColor: PropTypes.func,
 };

@@ -2,11 +2,14 @@ import { themes } from 'styles/themes';
 
 const { white } = themes.colors;
 
-const markAsRead = async message => {
+const markAsRead = message => {
   document.querySelectorAll('button').forEach(el => {
     if (el.innerText.trim() === message.text.trim()) {
       const activeElementEl = el.closest('li');
+      const prevActiveElement = activeElementEl.previousElementSibling;
+
       activeElementEl.style.backgroundColor = white;
+      if (prevActiveElement) prevActiveElement.style.backgroundColor = null;
       const scrollOnActive = () => {
         activeElementEl?.scrollIntoView({
           block: 'center',
@@ -18,7 +21,7 @@ const markAsRead = async message => {
   });
 };
 
-export const speakText = ({ text, lang, rate, divider, setLiColor }) => {
+export const speakText = ({ text, lang, rate = 1, divider, setLiColor }) => {
   const speech = window.speechSynthesis;
   const messageParts = text.split(divider);
   let currentIndex = 0;

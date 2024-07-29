@@ -22,7 +22,7 @@ import {
 } from './LiElement.styled';
 import ElEditForm from './Element/ElEditForm';
 
-const LiElement = ({ el, sortByDate, setSortByDate, liColor }) => {
+const LiElement = ({ el, sortByDate, setSortByDate, liColor, setLiColor }) => {
   const dispatch = useDispatch();
   const { elementTrash, activeElement } = useElements();
   const [isForm, setIsForm] = useState(false);
@@ -98,6 +98,7 @@ const LiElement = ({ el, sortByDate, setSortByDate, liColor }) => {
           el={el}
           sortByDate={sortByDate}
           setSortByDate={setSortByDate}
+          setLiColor={setLiColor}
         />
       )}
 
@@ -121,4 +122,5 @@ LiElement.propTypes = {
   sortByDate: PropTypes.bool,
   setSortByDate: PropTypes.func,
   liColor: PropTypes.string,
+  setLiColor: PropTypes.func,
 };

@@ -9,7 +9,7 @@ import { themes } from 'styles/themes';
 import LiElement from './Li/LiElement';
 import { List } from './ElementList.styled';
 
-const { background, white } = themes.colors;
+const { white } = themes.colors;
 
 const ElementList = () => {
   const dispatch = useDispatch();
@@ -73,6 +73,7 @@ const ElementList = () => {
           sortByDate={sortByDate}
           setSortByDate={setSortByDate}
           liColor={liColor}
+          setLiColor={setLiColor}
         />
       ))}
 
