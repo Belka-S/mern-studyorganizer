@@ -5,13 +5,20 @@ const { white } = themes.colors;
 const markAsRead = message => {
   document.querySelectorAll('button').forEach(el => {
     if (el.innerText.trim() === message.text.trim()) {
-      const activeElementEl = el.closest('li');
-      const prevActiveElement = activeElementEl.previousElementSibling;
+      const activeEl = el.closest('li');
+      const prevActiveEl = activeEl.previousElementSibling;
 
-      activeElementEl.style.backgroundColor = white;
-      if (prevActiveElement) prevActiveElement.style.backgroundColor = null;
+      activeEl.style.backgroundColor = white;
+      el.style.fontSize = '32px';
+      el.nextElementSibling.nextElementSibling.style.alignItems = 'center';
+
+      if (prevActiveEl) {
+        prevActiveEl.style.backgroundColor = null;
+        prevActiveEl.querySelector('button').style.fontSize = null;
+        prevActiveEl.querySelectorAll('button')[1].style.alignItems = null;
+      }
       const scrollOnActive = () => {
-        activeElementEl?.scrollIntoView({
+        activeEl?.scrollIntoView({
           block: 'center',
           behavior: 'smooth',
         });
