@@ -22,6 +22,12 @@ const Element = ({ el, sortByDate, setSortByDate, setLiColor }) => {
   };
 
   const speakCaption = () => {
+    window.scrollTo({
+      left: 0,
+      top: document.body.scrollHeight,
+      behavior: 'smooth',
+    });
+
     const msg = speakText({
       setLiColor,
       text: caption,
@@ -31,16 +37,13 @@ const Element = ({ el, sortByDate, setSortByDate, setLiColor }) => {
     msg && toast.error(msg);
   };
 
-  const handleSort = () => {
-    window.scrollTo({
-      left: 0,
-      top: document.body.scrollHeight,
-      behavior: 'smooth',
-    });
+  const handleSort = e => {
     setSortByDate(!sortByDate);
     sortByDate
       ? toast.success('Ascending by Date')
       : toast.success('Descending by Date');
+
+    e.stopImmediatePropagation();
   };
 
   const isAudio = caption.endsWith('mp3');

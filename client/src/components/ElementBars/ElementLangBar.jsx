@@ -7,7 +7,7 @@ import GridWrap from 'components/shared/GridWrap/GridWrap';
 import Select from 'components/shared/Select/Select';
 import Button from 'components/shared/Button/Button';
 
-import { useAuth, useClusters } from 'utils/hooks';
+import { useAuth, useClusters, useElements } from 'utils/hooks';
 import { updateUserThunk } from 'store/auth/authThunks';
 import { updateClusterThunk } from 'store/cluster/clusterThunks';
 import { setActiveCluster } from 'store/cluster/clusterSlice';
@@ -22,6 +22,7 @@ const ElementLangBar = ({ filtredElements, setLiColor }) => {
   const dispatch = useDispatch();
   const { user } = useAuth();
   const { activeCluster: ac } = useClusters();
+  const { activeElement } = useElements();
 
   const setClusterLang = ({ value }) => {
     dispatch(updateClusterThunk({ _id: ac._id, lang: value }))
@@ -51,8 +52,12 @@ const ElementLangBar = ({ filtredElements, setLiColor }) => {
     setLiColor(background);
     let textString = '';
     const divider = '$*@';
-    for (let i = 0; i < filtredElements.length; i += 1) {
-      const { element } = filtredElements[i];
+    const playList = filtredElements.splice(
+      filtredElements.findIndex(item => item.element === activeElement),
+    );
+
+    for (let i = 0; i < playList.length; i += 1) {
+      const { element } = playList[i];
       textString += element + divider;
     }
 
@@ -72,8 +77,12 @@ const ElementLangBar = ({ filtredElements, setLiColor }) => {
     setLiColor(background);
     let textString = '';
     const divider = '$*@';
-    for (let i = 0; i < filtredElements.length; i += 1) {
-      const { element, caption, lang } = filtredElements[i];
+    const playList = filtredElements.splice(
+      filtredElements.findIndex(item => item.element === activeElement),
+    );
+
+    for (let i = 0; i < playList.length; i += 1) {
+      const { element, caption, lang } = playList[i];
       textString += element + `@±@${lang}` + caption + divider;
     }
 
