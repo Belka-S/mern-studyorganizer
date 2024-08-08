@@ -40,8 +40,8 @@ const Element = ({ el, sortByDate, setSortByDate, setLiColor }) => {
   const handleSort = e => {
     setSortByDate(!sortByDate);
     sortByDate
-      ? toast.success('Ascending by Date')
-      : toast.success('Descending by Date');
+      ? toast.success('Below is Recent')
+      : toast.success('Above is Recent');
 
     e.stopImmediatePropagation();
   };
