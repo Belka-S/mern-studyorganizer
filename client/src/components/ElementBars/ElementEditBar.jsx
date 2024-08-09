@@ -15,14 +15,14 @@ const ElementEditBar = () => {
 
   return (
     <GridWrap
-      $m="15px 25px"
+      $m="15px 15px"
       $pos="absolute"
-      $side="left"
+      $side="right"
       $high="bottom"
       $gtc={gtc}
     >
-      {isAddBtn && <AddBtn />}
       {isDeleteBtn && <DeleteBtn />}
+      {isAddBtn && <AddBtn />}
     </GridWrap>
   );
 };
