@@ -20,7 +20,7 @@ const AddBtn = () => {
   useEffect(() => {
     const handleKeyDown = async e => {
       if (e.key === 'd' && e.metaKey) {
-        e.preventDefault();
+        e.prevent;
         await addElement();
       }
     };
@@ -35,7 +35,12 @@ const AddBtn = () => {
     const text = window.getSelection().toString();
     text && (await writeClipboard(text));
     // document.execCommand('copy');
-    const element = (await readClipboard()).trim();
+    const element = (await readClipboard())
+      .split(/\s+/)
+      .join(' ')
+      .replaceAll('\n', ' ')
+      .trim();
+
     const translation = { from: activeCluster.lang, to: user.lang };
     const caption = await translateText(element, translation);
     const { _id } = activeCluster;
