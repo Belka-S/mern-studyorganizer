@@ -52,9 +52,10 @@ const ElementLangBar = ({ filtredElements, setLiColor }) => {
     setLiColor(background);
     let textString = '';
     const divider = '$*@';
-    const playList = filtredElements.splice(
-      filtredElements.findIndex(item => item.element === activeElement),
+    const index = filtredElements.findIndex(
+      item => item.element === activeElement,
     );
+    const playList = filtredElements.splice(index === -1 ? 0 : index);
 
     for (let i = 0; i < playList.length; i += 1) {
       const { element } = playList[i];
@@ -77,9 +78,10 @@ const ElementLangBar = ({ filtredElements, setLiColor }) => {
     setLiColor(background);
     let textString = '';
     const divider = '$*@';
-    const playList = filtredElements.splice(
-      filtredElements.findIndex(item => item.element === activeElement),
+    const index = filtredElements.findIndex(
+      item => item.element === activeElement,
     );
+    const playList = filtredElements.splice(index === -1 ? 0 : index);
 
     for (let i = 0; i < playList.length; i += 1) {
       const { element, caption, lang } = playList[i];
