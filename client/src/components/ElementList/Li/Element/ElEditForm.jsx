@@ -71,7 +71,12 @@ const ElementEditForm = ({ el, article, isForm, setIsForm }) => {
   }, []);
 
   const onSubmit = data => {
-    dispatch(updateElementThunk({ _id, lang: user.lang, ...data }));
+    if (data.element.endsWith(', ')) {
+      const element = data.element.substring(0, data.element.length - 2);
+      dispatch(updateElementThunk({ _id, lang: user.lang, ...data, element }));
+    } else {
+      dispatch(updateElementThunk({ _id, lang: user.lang, ...data }));
+    }
     setIsForm(false);
   };
 
