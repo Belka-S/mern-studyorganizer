@@ -18,7 +18,7 @@ import {
   Textarea,
 } from './Element.styled';
 
-const ElementEditForm = ({ el, isForm, setIsForm }) => {
+const ElementEditForm = ({ el, article, isForm, setIsForm }) => {
   const dispatch = useDispatch();
   const { user } = useAuth();
   const { activeCluster } = useClusters();
@@ -30,6 +30,10 @@ const ElementEditForm = ({ el, isForm, setIsForm }) => {
     mode: 'onBlur',
     defaultValues: { element, caption },
   });
+
+  useEffect(() => {
+    setValue('element', article + element);
+  }, [article, element, setValue]);
 
   useEffect(() => {
     const handleKeyDown = async e => {
@@ -90,6 +94,7 @@ export default ElementEditForm;
 
 ElementEditForm.propTypes = {
   el: PropTypes.object,
+  article: PropTypes.string,
   isForm: PropTypes.oneOfType([PropTypes.bool, PropTypes.number]),
   setIsForm: PropTypes.func,
 };

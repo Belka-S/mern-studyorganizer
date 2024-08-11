@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux';
 import { TiStar } from 'react-icons/ti';
 import { FaCheck } from 'react-icons/fa';
 import { FiEdit3, FiTrash2 } from 'react-icons/fi';
+import { MdOutlineTextIncrease } from 'react-icons/md';
 
 import FlexWrap from 'components/shared/FlexWrap/FlexWrap';
 import { useElements } from 'utils/hooks';
@@ -31,6 +32,8 @@ const LiElement = ({ el, sortByDate, setSortByDate, liColor, setLiColor }) => {
   const isInTrash = elementTrash.find(el => el._id === _id);
 
   const active = element === activeElement;
+
+  const [article, setArticle] = useState('');
 
   useEffect(() => {
     const activeElementEl = document.getElementById('active-element');
@@ -64,6 +67,13 @@ const LiElement = ({ el, sortByDate, setSortByDate, liColor, setLiColor }) => {
     }
   };
 
+  const handleSetArticle = () => {
+    if (article === '') setArticle('der ');
+    if (article === 'der ') setArticle('die ');
+    if (article === 'die ') setArticle('das ');
+    if (article === 'das ') setArticle('');
+  };
+
   return (
     <Li
       id={active ? 'active-element' : null}
@@ -92,7 +102,14 @@ const LiElement = ({ el, sortByDate, setSortByDate, liColor, setLiColor }) => {
         </LabelChecked>
       </FlexWrap>
 
-      {isForm && <ElEditForm el={el} isForm={isForm} setIsForm={setIsForm} />}
+      {isForm && (
+        <ElEditForm
+          el={el}
+          article={article}
+          isForm={isForm}
+          setIsForm={setIsForm}
+        />
+      )}
       {!isForm && (
         <Element
           el={el}
@@ -106,6 +123,12 @@ const LiElement = ({ el, sortByDate, setSortByDate, liColor, setLiColor }) => {
         <TrashBtn $hovered={isInTrash} onClick={handleTrash}>
           <FiTrash2 size="16px" />
         </TrashBtn>
+
+        {isForm && (
+          <EditBtn onClick={handleSetArticle}>
+            <MdOutlineTextIncrease size="18px" />
+          </EditBtn>
+        )}
 
         <EditBtn onClick={handleEdit}>
           <FiEdit3 size="15px" />
