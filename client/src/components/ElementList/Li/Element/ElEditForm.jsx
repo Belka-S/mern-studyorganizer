@@ -26,14 +26,27 @@ const ElementEditForm = ({ el, article, isForm, setIsForm }) => {
   const { _id, element, caption } = el;
   const height = isForm + 24;
 
-  const { register, watch, setValue, handleSubmit } = useForm({
+  const { register, watch, setValue, handleSubmit, setFocus } = useForm({
     mode: 'onBlur',
     defaultValues: { element, caption },
   });
 
+  // set Article (Deutsch)
   useEffect(() => {
-    setValue('element', article + element);
-  }, [article, element, setValue]);
+    setFocus('element');
+
+    if (article && element.trim().startsWith('der')) {
+      setValue('element', article + element.replace('der', '').trim() + ', ');
+    } else if (article && element.trim().startsWith('die')) {
+      setValue('element', article + element.replace('die', '').trim() + ', ');
+    } else if (article && element.trim().startsWith('das')) {
+      setValue('element', article + element.replace('das', '').trim() + ', ');
+    } else {
+      article
+        ? setValue('element', article + element + ', ')
+        : setValue('element', article + element);
+    }
+  }, [article, element, setFocus, setValue]);
 
   useEffect(() => {
     const handleKeyDown = async e => {
