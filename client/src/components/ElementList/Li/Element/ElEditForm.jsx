@@ -71,12 +71,16 @@ const ElementEditForm = ({ el, article, isForm, setIsForm }) => {
   }, []);
 
   const onSubmit = data => {
-    if (data.element.endsWith(', ')) {
-      const element = data.element.substring(0, data.element.length - 2);
-      dispatch(updateElementThunk({ _id, lang: user.lang, ...data, element }));
-    } else {
-      dispatch(updateElementThunk({ _id, lang: user.lang, ...data }));
+    const lang = user.lang;
+    let element = data.element.trim();
+    let caption = data.caption.trim();
+    if (element.endsWith(',')) {
+      element = element.substring(0, element.length - 1);
     }
+    if (caption.endsWith(',')) {
+      caption = caption.substring(0, caption.length - 1);
+    }
+    dispatch(updateElementThunk({ _id, lang, element, caption }));
     setIsForm(false);
   };
 
