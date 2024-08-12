@@ -7,7 +7,7 @@ const { colors, breakpoints } = themes;
 // Base styles
 const baseStyles = css`
   position: relative;
-  width: ${({ $w }) => $w};
+  max-width: ${({ $w }) => $w};
   height: ${({ $h }) => $h};
   display: flex;
   justify-content: center;

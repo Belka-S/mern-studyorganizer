@@ -15,6 +15,8 @@ import { languageCodes, rateValues } from 'utils/constants';
 import { speakText, speakTranslation } from 'utils/helpers';
 import { themes } from 'styles/themes';
 
+import RefreshBtn from './EditBtns/RefreshBtn';
+
 const { background, backgroundHoverd, white, borderLight } = themes.colors;
 const { button } = themes.shadows;
 
@@ -101,7 +103,7 @@ const ElementLangBar = ({ filtredElements, setLiColor }) => {
   };
 
   return (
-    <GridWrap $m="0" $cg="8px" $ai="center" $gtc="2fr 2fr 1fr 1fr 2fr 2fr">
+    <GridWrap $m="0" $cg="8px" $ai="center" $gtc="2fr 2fr 1fr .3fr 1fr 2fr 2fr">
       <Select
         options={languageCodes}
         defaultValue={languageCodes.find(el => el.value === ac?.lang)}
@@ -124,6 +126,8 @@ const ElementLangBar = ({ filtredElements, setLiColor }) => {
       <Button onClick={playFiltred} $s="m" $bs={button}>
         play
       </Button>
+
+      <RefreshBtn />
 
       <Button onClick={playTranslated} $s="m" $bs={button}>
         all
