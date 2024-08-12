@@ -17,7 +17,10 @@ const Filter = ({ selector, reducer }) => {
     const filterValue = e.target.value.toLowerCase();
     dispatch(reducer(filterValue));
   };
-  const handleClean = () => dispatch(reducer(''));
+  const handleClean = e => {
+    dispatch(reducer(''));
+    e.currentTarget.parentElement.firstElementChild.focus();
+  };
 
   return (
     <FilterDiv>
