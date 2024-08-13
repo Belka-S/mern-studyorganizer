@@ -9,8 +9,7 @@ const { colors, indents } = themes;
 // element
 
 const baseWrapStyles = css`
-  /* padding-block: 4px; */
-  /* height: 100%; */
+  padding-block: 4px;
   display: grid;
   align-items: center;
   grid-template-columns: 20fr 1fr 20fr;

@@ -8,7 +8,6 @@ const { colors, shadows, indents } = themes;
 // li
 
 const baseLiStyle = css`
-  /* margin-bottom: ${indents.s}; */
   margin-bottom: 7px;
   padding-block: ${indents.xs};
 
