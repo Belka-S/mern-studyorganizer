@@ -46,9 +46,12 @@ const AddBtn = () => {
     const { _id } = activeCluster;
     try {
       const payload =
-        element.split(/\s+/).length === 1
-          ? { element, caption, cluster: _id, favorite: true }
-          : { element, caption, cluster: _id };
+        element.split(/\s+/).length !== 1
+          ? { element, caption, cluster: _id }
+          : element.includes('https://')
+          ? { element: '[]', caption, cluster: _id, checked: false }
+          : { element, caption, cluster: _id, favorite: true };
+
       dispatch(addElementThunk(payload));
       dispatch(setActiveElement(element));
       e.target.blur();
