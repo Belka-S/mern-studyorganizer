@@ -77,9 +77,13 @@ const ElementEditForm = ({ el, article, isForm, setIsForm }) => {
     if (element.endsWith(',')) {
       element = element.substring(0, element.length - 1);
     }
+    if (element.includes(' ·')) {
+      element = element.replaceAll(' ·', ',');
+    }
     if (caption.endsWith(',')) {
       caption = caption.substring(0, caption.length - 1);
     }
+
     dispatch(updateElementThunk({ _id, lang, element, caption }));
     setIsForm(false);
   };
