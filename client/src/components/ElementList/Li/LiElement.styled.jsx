@@ -27,6 +27,7 @@ export const Li = styled.li`
 
   &#active-element {
     border: 1px solid ${colors.border};
+    box-shadow: ${shadows.back};
   }
 
   &:hover {

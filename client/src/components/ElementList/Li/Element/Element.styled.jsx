@@ -9,8 +9,8 @@ const { colors, indents } = themes;
 // element
 
 const baseWrapStyles = css`
-  padding-block: 4px;
-  height: 100%;
+  /* padding-block: 4px; */
+  /* height: 100%; */
   display: grid;
   align-items: center;
   grid-template-columns: 20fr 1fr 20fr;
@@ -23,6 +23,8 @@ export const GridWrap = styled.div`
 export const Form = styled.form`
   ${baseWrapStyles}
 
+  max-height: 70vh;
+  overflow-y: scroll;
   grid-template-columns: 12fr 1fr 12fr;
 `;
 
@@ -89,7 +91,7 @@ export const SpeakBtn = styled.button`
 
   &:hover,
   &:focus {
-    background-color: ${colors.backgroundHoverd};
+    background-color: ${colors.background};
   }
 `;
 
