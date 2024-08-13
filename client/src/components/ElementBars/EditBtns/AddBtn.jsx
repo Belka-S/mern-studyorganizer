@@ -45,7 +45,11 @@ const AddBtn = () => {
     const caption = await translateText(element, translation);
     const { _id } = activeCluster;
     try {
-      dispatch(addElementThunk({ element, caption, cluster: _id }));
+      const payload =
+        element.split(/\s+/).length === 1
+          ? { element, caption, cluster: _id, favorite: true }
+          : { element, caption, cluster: _id };
+      dispatch(addElementThunk(payload));
       dispatch(setActiveElement(element));
       e.target.blur();
     } catch (err) {
