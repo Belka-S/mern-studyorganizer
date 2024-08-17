@@ -72,7 +72,7 @@ export const speakTranslation = ({ text, lang, rate, divider, setLiColor }) => {
   let currentIndex = 0;
   const currentMsg = messageParts[currentIndex];
   const transLang = currentMsg.split('@±@')[1].substring(0, 2);
-
+  // message
   const message = new SpeechSynthesisUtterance();
   const voices = speech.getVoices().filter(el => el.lang.includes(lang));
   if (!voices[0]) {
@@ -81,7 +81,7 @@ export const speakTranslation = ({ text, lang, rate, divider, setLiColor }) => {
   message.voice = voices[0];
   message.rate = rate;
   message.text = currentMsg.split('@±@')[0];
-
+  // translation
   const translation = new SpeechSynthesisUtterance();
   const voicesT = speech.getVoices().filter(el => el.lang.includes(transLang));
   if (!voicesT[0]) {
@@ -90,9 +90,8 @@ export const speakTranslation = ({ text, lang, rate, divider, setLiColor }) => {
   translation.voice = voicesT[0];
   translation.rate = rate;
   translation.text = currentMsg.split('@±@')[1].substring(2);
-
-  // divide message on parts
-  translation.onend = () => {
+  // divide message + translation on parts
+  message.onend = () => {
     markAsRead(message);
     currentIndex += 1;
     if (currentIndex < messageParts.length) {
@@ -106,8 +105,8 @@ export const speakTranslation = ({ text, lang, rate, divider, setLiColor }) => {
       translation.text = currentMsg.split('@±@')[1].substring(2);
 
       setTimeout(() => {
-        speech.speak(message);
         speech.speak(translation);
+        speech.speak(message);
       }, messageParts[currentIndex - 1].length * 80);
     }
   };
@@ -116,7 +115,7 @@ export const speakTranslation = ({ text, lang, rate, divider, setLiColor }) => {
     speech.cancel();
     setLiColor(white);
   } else {
-    speech.speak(message);
     speech.speak(translation);
+    speech.speak(message);
   }
 };
