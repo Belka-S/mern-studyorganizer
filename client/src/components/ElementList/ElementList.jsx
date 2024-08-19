@@ -44,6 +44,7 @@ const ElementList = () => {
     .filter(({ element, caption, favorite, checked }) => {
       // filter
       const allFiltred =
+        element.toLowerCase().replace('·', '').includes(elementFilter) ||
         element.toLowerCase().includes(elementFilter) ||
         caption.toLowerCase().includes(elementFilter);
       // filter + favorite
