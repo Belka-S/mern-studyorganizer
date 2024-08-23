@@ -6,9 +6,13 @@ const getAll = ctrlWrapper(async (req, res) => {
   const owner = req.user._id;
   const { page = 1, limit = 1000000, ...query } = req.query;
   const projection = '-updatedAt';
-  const skip = (page - 1) * limit;
+  const options = {
+    limit,
+    skip: (page - 1) * limit,
+    enableUtf8Validation: false,
+  };
   const total = await Element.countDocuments({ owner, ...query });
-  const elements = await Element.find({ owner, ...query }, projection, { skip, limit })
+  const elements = await Element.find({ owner, ...query }, projection, options)
     // .populate('owner', 'name email')
     .sort({ createdAt: 1 });
   if (!elements) throw HttpError(403);
