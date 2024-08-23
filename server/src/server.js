@@ -6,7 +6,7 @@ const { PORT = 3000 } = process.env;
 /* eslint-disable no-console */
 (async () => {
   try {
-    await connectDB(DB_HOST, { enableUtf8Validation: true });
+    await connectDB(DB_HOST, { enableUtf8Validation: false });
     console.info('  -> Connected to MongoDB!');
     app.listen(PORT, () => console.log(`  -> Server:  http://localhost:${PORT}/`));
   } catch (error) {
