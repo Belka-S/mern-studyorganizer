@@ -7,7 +7,7 @@
   "author": "BS",
   "license": "ISC",
   "engines": {
-    "node": ">=17.9.1"
+    "node": "=20.9.0"
   },
   "scripts": {
     "start": "cross-env NODE_ENV=production node src/server.js",
