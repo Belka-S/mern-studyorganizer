@@ -61,7 +61,14 @@ const ElementLangBar = ({ filtredElements, setLiColor }) => {
 
     for (let i = 0; i < playList.length; i += 1) {
       const { element } = playList[i];
-      textString += element + divider;
+      if (element.endsWith('.')) {
+        textString += element
+          .replaceAll('.', divider)
+          .replaceAll('!', divider)
+          .replaceAll(',', divider);
+      } else {
+        textString += element.replaceAll('.', divider) + divider;
+      }
     }
 
     const msg = speakText({

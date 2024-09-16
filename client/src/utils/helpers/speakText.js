@@ -4,7 +4,10 @@ const { white } = themes.colors;
 
 const markAsRead = message => {
   document.querySelectorAll('button').forEach(el => {
-    if (el.innerText.trim() === message.text.trim()) {
+    if (
+      el.innerText.trim().includes(message.text.trim())
+      // || el.innerText.trim() === message.text.trim()
+    ) {
       const activeEl = el.closest('li');
       const prevActiveEl = activeEl.previousElementSibling;
 
@@ -42,8 +45,8 @@ export const speakText = ({ text, lang, rate = 1, divider, setLiColor }) => {
   message.voice = voices[0];
   message.volume = 1; // 0 to 1
   message.rate = rate; // 0.1 to 10
-  // message.pitch = 1; // 0 to 2
   message.text = messageParts[0];
+  // message.pitch = 1; // 0 to 2
 
   // divide message on parts
   message.onend = () => {
@@ -66,7 +69,13 @@ export const speakText = ({ text, lang, rate = 1, divider, setLiColor }) => {
   }
 };
 
-export const speakTranslation = ({ text, lang, rate, divider, setLiColor }) => {
+export const speakTranslation = ({
+  text,
+  lang,
+  rate = 1,
+  divider,
+  setLiColor,
+}) => {
   const speech = window.speechSynthesis;
   const messageParts = text.split(divider);
   let currentIndex = 0;
@@ -88,7 +97,7 @@ export const speakTranslation = ({ text, lang, rate, divider, setLiColor }) => {
     return `No ${lang.toUpperCase()} voice available`;
   }
   translation.voice = voicesT[0];
-  translation.rate = rate;
+  translation.rate = 1;
   translation.text = currentMsg.split('@±@')[1].substring(2);
   // divide message + translation on parts
   message.onend = () => {
