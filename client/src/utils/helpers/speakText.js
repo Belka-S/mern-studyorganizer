@@ -4,17 +4,15 @@ const { white } = themes.colors;
 
 const markAsRead = message => {
   document.querySelectorAll('button').forEach(el => {
-    if (
-      el.innerText.trim().includes(message.text.trim())
-      // || el.innerText.trim() === message.text.trim()
-    ) {
+    if (el.innerText.trim().includes(message.text.trim())) {
       const activeEl = el.closest('li');
       const prevActiveEl = activeEl?.previousElementSibling;
+      const activElTranslation = el.nextElementSibling.nextElementSibling;
 
-      if (activeEl) {
-        activeEl.style.backgroundColor = white;
-        el.style.fontSize = '32px';
-        el.nextElementSibling.nextElementSibling.style.alignItems = 'center';
+      activeEl.style.backgroundColor = white;
+      el.style.fontSize = '32px';
+      if (activElTranslation) {
+        activElTranslation.alignItems = 'center';
       }
       if (prevActiveEl) {
         prevActiveEl.style.backgroundColor = null;
