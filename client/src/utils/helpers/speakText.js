@@ -7,14 +7,13 @@ const markAsRead = message => {
     if (el.innerText.trim().includes(message.text.trim())) {
       const activeEl = el.closest('li');
       const prevActiveEl = activeEl?.previousElementSibling;
-      const activElTranslation = el.nextElementSibling.nextElementSibling;
 
       el.style.fontSize = '32px';
       if (activeEl && activeEl.style) {
         activeEl.style.backgroundColor = white;
       }
-      if (activElTranslation) {
-        activElTranslation.alignItems = 'center';
+      if (el.nextElementSibling && el.nextElementSibling.nextElementSibling) {
+        el.nextElementSibling.nextElementSibling.alignItems = 'center';
       }
       if (prevActiveEl) {
         prevActiveEl.style.backgroundColor = null;
