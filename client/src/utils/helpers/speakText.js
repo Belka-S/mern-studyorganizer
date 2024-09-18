@@ -9,7 +9,7 @@ const markAsRead = message => {
       // || el.innerText.trim() === message.text.trim()
     ) {
       const activeEl = el.closest('li');
-      const prevActiveEl = activeEl.previousElementSibling;
+      const prevActiveEl = activeEl?.previousElementSibling;
 
       activeEl.style.backgroundColor = white;
       el.style.fontSize = '32px';
