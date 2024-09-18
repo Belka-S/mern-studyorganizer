@@ -11,10 +11,11 @@ const markAsRead = message => {
       const activeEl = el.closest('li');
       const prevActiveEl = activeEl?.previousElementSibling;
 
-      activeEl.style.backgroundColor = white;
-      el.style.fontSize = '32px';
-      el.nextElementSibling.nextElementSibling.style.alignItems = 'center';
-
+      if (activeEl) {
+        activeEl.style.backgroundColor = white;
+        el.style.fontSize = '32px';
+        el.nextElementSibling.nextElementSibling.style.alignItems = 'center';
+      }
       if (prevActiveEl) {
         prevActiveEl.style.backgroundColor = null;
         prevActiveEl.querySelector('button').style.fontSize = null;
