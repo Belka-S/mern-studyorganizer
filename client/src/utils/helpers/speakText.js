@@ -9,8 +9,10 @@ const markAsRead = message => {
       const prevActiveEl = activeEl?.previousElementSibling;
       const activElTranslation = el.nextElementSibling.nextElementSibling;
 
-      activeEl.style.backgroundColor = white;
       el.style.fontSize = '32px';
+      if (activeEl && activeEl.style) {
+        activeEl.style.backgroundColor = white;
+      }
       if (activElTranslation) {
         activElTranslation.alignItems = 'center';
       }
