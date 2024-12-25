@@ -1,19 +1,20 @@
 import PropTypes from 'prop-types';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { TiStar } from 'react-icons/ti';
-import { FaCheck } from 'react-icons/fa';
+import { FaCheck, FaExternalLinkAlt } from 'react-icons/fa';
 import { FiEdit3, FiTrash2 } from 'react-icons/fi';
 import { MdOutlineTextIncrease } from 'react-icons/md';
 
 import FlexWrap from 'components/shared/FlexWrap/FlexWrap';
 import { useElements } from 'utils/hooks';
 import { updateElementThunk } from 'store/element/elementThunks';
-import { setElementTrash, setActiveElement } from 'store/element/elementSlice';
+import { setElementTrash } from 'store/element/elementSlice';
 
 import Element from './Element/Element';
+import ElEditForm from './Element/ElEditForm';
 import {
   Li,
   LabelFavorite,
@@ -21,32 +22,27 @@ import {
   TrashBtn,
   EditBtn,
 } from './LiElement.styled';
-import ElEditForm from './Element/ElEditForm';
+import { TranslateBtn } from './Element/Element.styled';
 
-const LiElement = ({ el, sortByDate, setSortByDate, liColor, setLiColor }) => {
+const LiElement = ({
+  el,
+  index,
+  length,
+  sortByDate,
+  setSortByDate,
+  translateAll,
+  liColor,
+  setLiColor,
+}) => {
   const dispatch = useDispatch();
   const { elementTrash, activeElement } = useElements();
+
   const [isForm, setIsForm] = useState(false);
 
-  const { _id, element, favorite, checked } = el;
+  const { _id, favorite, checked } = el;
   const isInTrash = elementTrash.find(el => el._id === _id);
 
-  const active = element === activeElement;
-
   const [article, setArticle] = useState('');
-
-  useEffect(() => {
-    const activeElementEl = document.getElementById('active-element');
-    const scrollOnActive = () => {
-      activeElementEl?.scrollIntoView({
-        block: 'center',
-        behavior: 'smooth',
-      });
-    };
-    activeElementEl
-      ? scrollOnActive()
-      : window.scrollTo(0, document.body.scrollHeight);
-  }, []);
 
   const handleFavorite = () => {
     dispatch(updateElementThunk({ _id, favorite: !favorite }));
@@ -74,12 +70,10 @@ const LiElement = ({ el, sortByDate, setSortByDate, liColor, setLiColor }) => {
     if (article === 'das ') setArticle('');
   };
 
+  const isActive = _id === activeElement?._id;
+
   return (
-    <Li
-      id={active ? 'active-element' : null}
-      onClick={() => dispatch(setActiveElement(element))}
-      liColor={liColor}
-    >
+    <Li id={isActive ? 'active-element' : null} licolor={liColor}>
       <FlexWrap $h="100%" $p="0" $fd="column">
         <LabelFavorite $hovered={favorite}>
           <input
@@ -100,6 +94,12 @@ const LiElement = ({ el, sortByDate, setSortByDate, liColor, setLiColor }) => {
           />
           <FaCheck size="15px" />
         </LabelChecked>
+
+        {isForm && length === index + 1 && (
+          <TranslateBtn onClick={translateAll}>
+            <FaExternalLinkAlt size="16px" />
+          </TranslateBtn>
+        )}
       </FlexWrap>
 
       {isForm && (
@@ -142,8 +142,11 @@ export default LiElement;
 
 LiElement.propTypes = {
   el: PropTypes.object,
+  index: PropTypes.number,
+  length: PropTypes.number,
   sortByDate: PropTypes.bool,
   setSortByDate: PropTypes.func,
+  translateAll: PropTypes.func,
   liColor: PropTypes.string,
   setLiColor: PropTypes.func,
 };

@@ -1,39 +1,85 @@
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 
-import { getMediaLink, speakText, writeClipboard } from 'utils/helpers';
-import { useClusters } from 'utils/hooks';
+import { useDispatch } from 'react-redux';
+
+import { getMediaLink, speakText } from 'utils/helpers';
+import { useAuth, useClusters } from 'utils/hooks';
+import { setActiveElement } from 'store/element/elementSlice';
+import { updateClusterThunk } from 'store/cluster/clusterThunks';
 
 import { GridWrap, Divider, SpeakBtn, Iframe, Audio } from './Element.styled';
 
 const Element = ({ el, sortByDate, setSortByDate, setLiColor }) => {
+  const dispatch = useDispatch();
+  const { user } = useAuth();
   const { activeCluster } = useClusters();
   const { element, caption } = el;
 
-  const speakElement = async () => {
+  const divider = '$*@';
+  const getTextString = (text, divider) => {
+    let textString = '';
+    if (!divider) return text;
+    if (
+      text.trim().endsWith('.') ||
+      text.trim().endsWith('!') ||
+      text.trim().endsWith('?') ||
+      text.endsWith('"')
+    ) {
+      textString = text
+        .trim()
+        // dividers
+        .replaceAll(',`', ';')
+        .replaceAll(' `', `${divider} `)
+        // abbreviations
+        .replaceAll('Mr.', 'mister')
+        .replaceAll('Ms.', 'miss')
+        .replaceAll('Mrs.', 'missis')
+        // punctuation
+        .replaceAll('...', `__${divider}`)
+        .replaceAll('.', `.${divider}`)
+        .replaceAll(',', `,${divider}`)
+        .replaceAll('!', `!${divider}`)
+        .replaceAll('?', `?${divider}`)
+        .replaceAll(':', `:${divider}`)
+        // numbers
+        .replaceAll(`0.${divider}`, '0.')
+        .replaceAll(`1.${divider}`, '1.')
+        .replaceAll(`2.${divider}`, '2.')
+        .replaceAll(`3.${divider}`, '3.')
+        .replaceAll(`4.${divider}`, '4.')
+        .replaceAll(`5.${divider}`, '5.')
+        .replaceAll(`6.${divider}`, '6.')
+        .replaceAll(`7.${divider}`, '7.')
+        .replaceAll(`8.${divider}`, '8.')
+        .replaceAll(`9.${divider}`, '9.');
+    } else {
+      textString = text.trim() + divider;
+    }
+    return !textString.includes('[')
+      ? textString
+      : textString.substring(0, textString.indexOf('[')) + divider;
+  };
+  const speakElement = e => {
     const msg = speakText({
       setLiColor,
-      text: element,
+      divider,
+      text: getTextString(element, divider),
       lang: activeCluster.lang,
       rate: activeCluster.rate,
     });
-    await writeClipboard(element);
+    e.target.blur();
     msg && toast.error(msg);
   };
-
-  const speakCaption = () => {
-    window.scrollTo({
-      left: 0,
-      top: document.body.scrollHeight,
-      behavior: 'smooth',
-    });
-
+  const speakCaption = e => {
     const msg = speakText({
       setLiColor,
-      text: caption,
+      divider,
+      text: getTextString(caption, divider),
       lang: el.lang,
-      rate: el.rate,
+      rate: user.rate,
     });
+    e.target.blur();
     msg && toast.error(msg);
   };
 
@@ -43,7 +89,15 @@ const Element = ({ el, sortByDate, setSortByDate, setLiColor }) => {
       ? toast.success('Below is Recent')
       : toast.success('Above is Recent');
 
-    e.stopImmediatePropagation();
+    e.stopPropagation();
+  };
+
+  const handleSetActiveElement = e => {
+    const { _id } = activeCluster;
+    dispatch(setActiveElement(el));
+    if (e.currentTarget.closest('li').id !== 'active-element') {
+      dispatch(updateClusterThunk({ _id, activeEl: el._id }));
+    }
   };
 
   const isAudio = caption.endsWith('mp3');
@@ -51,7 +105,7 @@ const Element = ({ el, sortByDate, setSortByDate, setLiColor }) => {
   const isBtn = !isAudio && !isIframe;
 
   return (
-    <GridWrap>
+    <GridWrap onClick={handleSetActiveElement}>
       <SpeakBtn onClick={speakElement}>{element}</SpeakBtn>
 
       <Divider onClick={handleSort} />

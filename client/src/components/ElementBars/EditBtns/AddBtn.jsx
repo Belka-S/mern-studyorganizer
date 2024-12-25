@@ -6,10 +6,8 @@ import { toast } from 'react-toastify';
 import Button from 'components/shared/Button/Button';
 import { readClipboard, writeClipboard, translateText } from 'utils/helpers';
 import { addElementThunk } from 'store/element/elementThunks';
-import { setActiveElement } from 'store/element/elementSlice';
 import { useAuth, useClusters } from 'utils/hooks';
 import { themes } from 'styles/themes';
-
 const { button } = themes.shadows;
 
 const AddBtn = () => {
@@ -53,7 +51,6 @@ const AddBtn = () => {
           : { element, caption, cluster: _id, favorite: true };
 
       dispatch(addElementThunk(payload));
-      dispatch(setActiveElement(element));
       e.target.blur();
     } catch (err) {
       e.target.blur();

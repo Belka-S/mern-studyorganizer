@@ -6,7 +6,7 @@ import {
   fetchGroupsThunk,
 } from 'store/cluster/clusterThunks';
 import { useClusters, useElements } from 'utils/hooks';
-import { fetchElementsThunk } from 'store/element/elementThunks';
+// import { fetchElementsThunk } from 'store/element/elementThunks';
 
 import LiGroup from './Li/LiGroup';
 import LiCluster from './Li/LiCluster';
@@ -25,13 +25,13 @@ const ClusterList = () => {
   useEffect(() => {
     dispatch(fetchClustersThunk());
     dispatch(fetchGroupsThunk());
-    dispatch(fetchElementsThunk());
+    // dispatch(fetchElementsThunk());
   }, [dispatch]);
 
   useEffect(() => {
-    const activeFileEl = document.getElementById('active-cluster');
+    const activeDomEl = document.getElementById('active-cluster');
     const scrollOnActive = () => {
-      activeFileEl?.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      activeDomEl?.scrollIntoView({ block: 'center', behavior: 'smooth' });
     };
     scrollOnActive();
   }, []);
@@ -68,24 +68,33 @@ const ClusterList = () => {
       const allFiltred =
         group.toLowerCase().includes(clusterFilter) ||
         title.toLowerCase().includes(clusterFilter);
-      // filter + favorite
-      const filtredFavorite = clusterSelect.includes('favorite')
-        ? allFiltred && favorite === true
-        : allFiltred;
-      // filter + favorite + checked
-      if (clusterSelect.some(el => ['checked', 'unchecked'].includes(el))) {
-        return clusterSelect.includes('checked')
-          ? filtredFavorite && checked === true
-          : filtredFavorite && checked === false;
-      }
-      return filtredFavorite;
+      // favorite
+      const getFavorite = () => {
+        if (clusterSelect.some(op => ['favorite', 'unfavorite'].includes(op))) {
+          return clusterSelect.includes('favorite')
+            ? allFiltred && favorite === true
+            : allFiltred && favorite === false;
+        } else {
+          return allFiltred;
+        }
+      };
+      // checked
+      const getCheckedFavorite = () => {
+        if (clusterSelect.some(op => ['checked', 'unchecked'].includes(op))) {
+          return clusterSelect.includes('checked')
+            ? getFavorite() && checked === true
+            : getFavorite() && checked === false;
+        } else {
+          return getFavorite();
+        }
+      };
+      return getCheckedFavorite();
     })
     .sort(
       sortByDate
         ? (a, b) => b.createdAt.localeCompare(a.createdAt)
         : (a, b) => a.title.localeCompare(b.title),
     );
-
   // groups filter+selector
   const clusterGroups = Array.from(
     new Set(filtredClusters.map(el => el.group)),

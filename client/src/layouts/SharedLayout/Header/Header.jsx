@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
-import { NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { NavLink, useLocation } from 'react-router-dom';
 
 import GdriveSearchBar from 'components/GdriveBars/GdriveSearchBar';
 import ClustersSearchBar from 'components/ClusterBars/ClusterSearchBar';
@@ -17,33 +18,74 @@ const { s } = themes.indents;
 
 const Header = ({ $height, barW, setBarW }) => {
   const { pathname } = useLocation();
-  const navigate = useNavigate();
   const { isLoggedIn } = useAuth();
   const { activeCluster: ac } = useClusters();
   const { activeFile: af } = useGdrive();
 
-  const scroll = () => {
-    const activeFileEl = document.getElementById('active-file');
-    const scrollOnActive = () => {
-      activeFileEl?.scrollIntoView({ block: 'center', behavior: 'smooth' });
-    };
-    const scrollOnTop = () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    };
-    const positionY = activeFileEl?.getBoundingClientRect().y;
-    const isVisible = window.innerHeight > positionY;
-    isVisible ? scrollOnTop() : scrollOnActive();
+  useEffect(() => {
+    isLoggedIn ? setBarW('18%') : setBarW('45%');
+  }, [isLoggedIn, setBarW]);
+
+  const scrollOnTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+  const scrollOnBottom = () => {
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+  };
+  const scrollOnActive = el => {
+    el?.scrollIntoView({ block: 'center', behavior: 'smooth' });
   };
 
-  const handleNavigate = () => {
+  const scrollGdrive = () => {
+    const activeFileEl = document.getElementById('active-file');
+    if (!activeFileEl) {
+      window.scrollY === 0 ? scrollOnBottom() : scrollOnTop();
+      return;
+    }
+    const positionY = activeFileEl?.getBoundingClientRect().y;
+    const isVisible = positionY < window.innerHeight && positionY > 0;
+    isVisible ? scrollOnBottom() : scrollOnActive(activeFileEl);
+  };
+
+  const scrollCluster = () => {
+    const activeClusterEl = document.getElementById('active-cluster');
+    if (!activeClusterEl) {
+      window.scrollY === 0 ? scrollOnBottom() : scrollOnTop();
+      return;
+    }
+    const positionY = activeClusterEl?.getBoundingClientRect().y;
+    const isVisible = positionY < window.innerHeight && positionY > 0;
+    isVisible ? scrollOnBottom() : scrollOnActive(activeClusterEl);
+  };
+
+  const scrollElement = () => {
+    const activeElementEl = document.getElementById('active-element');
+    if (!activeElementEl) {
+      window.scrollY === 0 ? scrollOnBottom() : scrollOnTop();
+      return;
+    }
+    const positionY = activeElementEl?.getBoundingClientRect().y;
+    const isVisible = positionY < window.innerHeight && positionY > 0;
+    isVisible ? scrollOnBottom() : scrollOnActive(activeElementEl);
+  };
+
+  const handleClick = () => {
+    const currenPosition = window.scrollY; // const lowestPosition = document.body.scrollHeight - window.innerHeight;
+    if (currenPosition === 0) {
+      barW !== '18%' ? setBarW('18%') : setBarW('45%');
+    }
+    scrollOnTop();
+  };
+
+  const handleScroll = () => {
     if (pathname.includes('/cluster')) {
-      navigate(`/element/${ac?._id}`, { replace: true });
+      scrollCluster(); // navigate(`/element/${ac?._id}`, { replace: true });
     }
     if (pathname.includes('/element')) {
-      navigate('/cluster', { replace: true });
+      scrollElement(); // navigate('/cluster', { replace: true });
     }
     if (pathname.includes('/gdrive')) {
-      scroll();
+      scrollGdrive();
     }
   };
 
@@ -63,16 +105,14 @@ const Header = ({ $height, barW, setBarW }) => {
   return (
     <StyledHeader $height={$height}>
       <FlexWrap $w={barW > '45%' ? barW : '45%'} $p={`0 ${s} 0 0`} $ai="center">
-        <LogoBtn
-          onClick={() => (barW === '30%' ? setBarW('50%') : setBarW('30%'))}
-        >
+        <LogoBtn onClick={handleClick}>
           <Logo />
         </LogoBtn>
         <Nav>
           {isLoggedIn && <NavLink to="/gdrive">G-Drive</NavLink>}
           {isLoggedIn && <NavLink to="/cluster">Cluster</NavLink>}
           {isLoggedIn && (
-            <TitleBtn onClick={handleNavigate}>
+            <TitleBtn onClick={handleScroll}>
               {clusterTitle()}
               {gdriveTitle()}
             </TitleBtn>

@@ -15,7 +15,8 @@ const baseLiStyle = css`
   align-items: center;
   grid-template-columns: 1fr 25fr 1fr;
 
-  background-color: ${({ liColor }) => liColor};
+  border: 1px solid transparent;
+  background-color: ${({ licolor }) => licolor};
   border-radius: ${indents.xs};
   font-size: 22px;
 `;
@@ -25,12 +26,31 @@ export const Li = styled.li`
   transition: box-shadow 250ms, border-color 250ms;
 
   &#active-element {
-    border: 1px solid ${colors.border};
+    border-color: ${colors.border};
+    background-color: ${colors.background};
     box-shadow: ${shadows.back};
+
+    &:hover {
+      border-color: ${colors.accent};
+    }
+    & div button {
+      transition: color 250ms;
+      color: ${colors.smokeBlack};
+      &:hover {
+        color: ${colors.hovered};
+      }
+    }
+  }
+
+  & div button {
+    transition: color 250ms;
+    &:hover {
+      color: ${colors.hovered};
+    }
   }
 
   &:hover {
-    border-color: ${colors.border};
+    border-color: ${colors.accent};
     box-shadow: ${shadows.back};
   }
 
@@ -43,6 +63,7 @@ export const Li = styled.li`
 // input label
 
 const baseLabelStyle = css`
+  min-height: 19px;
   width: 100%;
   display: flex;
   align-items: center;

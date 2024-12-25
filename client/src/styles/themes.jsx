@@ -6,8 +6,10 @@ export const themes = Object.freeze({
   },
   colors: {
     black: '#343434',
+    smokeBlack: '#0a0a0a',
     white: '#FFFFFF',
     yellow: '#f3cf00',
+    lightYellow: '#fdf5d0',
 
     accent: '#2374ef',
     hovered: '#1f68d7',

@@ -10,7 +10,7 @@ import Toast from 'components/shared/Toast/Toast';
 import OvalLoader from 'components/shared/Loader/OvalLoader';
 import SharedLayout from 'layouts/SharedLayout/SharedLayout';
 
-import HomePage from 'pages/HomePage';
+// import HomePage from 'pages/HomePage';
 import GooglePage from 'pages/GooglePage';
 const SignupPage = lazy(() => import('pages/SignupPage'));
 const SigninPage = lazy(() => import('pages/SigninPage'));
@@ -32,10 +32,9 @@ const App = () => {
       {!(isRefreshing || isLoading) && (
         <Routes>
           <Route path="/" element={<SharedLayout />}>
-            <Route index element={<SigninPage />} />
             <Route element={<PublicRoutes />}>
+              <Route index element={<SigninPage />} />
               <Route path="signup" element={<SignupPage />} />
-              <Route path="signin" element={<SigninPage />} />
               <Route path="reset" element={<ForgotPage />} />
               <Route path="google" element={<GooglePage />} />
             </Route>

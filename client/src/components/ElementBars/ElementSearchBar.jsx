@@ -23,15 +23,23 @@ const ElementSearchBar = () => {
   }, [dispatch, selectValue]);
 
   const getOptions = selectValue => {
-    const options = baseOptions.filter(el => el.value !== 'recent');
+    let options = baseOptions.filter(
+      el => !['recent', 'gdrive', 'ungdrive'].includes(el.value),
+    );
+
+    if (selectValue.includes('favorite')) {
+      options = options.filter(el => el.value !== 'unfavorite');
+    }
+    if (selectValue.includes('unfavorite')) {
+      options = options.filter(el => el.value !== 'favorite');
+    }
     if (selectValue.includes('checked')) {
       return options.filter(el => el.value !== 'unchecked');
     }
     if (selectValue.includes('unchecked')) {
       return options.filter(el => el.value !== 'checked');
-    } else {
-      return options;
     }
+    return options;
   };
 
   const defaultValue = getOptions(selectValue).filter(el => {
