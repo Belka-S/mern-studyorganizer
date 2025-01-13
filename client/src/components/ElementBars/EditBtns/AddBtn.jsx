@@ -48,7 +48,7 @@ const AddBtn = () => {
         element.split(/\s+/).length !== 1
           ? { element, caption, cluster: _id, checked: true }
           : element.includes('https://')
-          ? { element: '[]', caption, cluster: _id }
+          ? { element: '[]', caption: element, cluster: _id }
           : { element, caption, cluster: _id, favorite: true };
 
       dispatch(addElementThunk(payload));
