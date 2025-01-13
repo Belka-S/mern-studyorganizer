@@ -22,6 +22,7 @@ const { button } = themes.shadows;
 
 const ElementLangBar = ({ filtredElements, setLiColor }) => {
   const dispatch = useDispatch();
+
   const { user } = useAuth();
   const { activeCluster: ac } = useClusters();
   const { activeElement: ae } = useElements();
@@ -97,7 +98,7 @@ const ElementLangBar = ({ filtredElements, setLiColor }) => {
           .replaceAll(',', `,${divider}`)
           .replaceAll('!', `!${divider}`)
           .replaceAll('?', `?${divider}`)
-          .replaceAll(':', `:${divider}`)
+          .replaceAll(': ', `:${divider} `)
           // numbers
           .replaceAll(`0.${divider}`, '0.')
           .replaceAll(`1.${divider}`, '1.')

@@ -1,11 +1,17 @@
+import { useLocation } from 'react-router-dom';
+
 import { useClusters, useElements } from 'utils/hooks';
 
 import GridWrap from 'components/shared/GridWrap/GridWrap';
+import { themes } from 'styles/themes';
 
 import AddBtn from './EditBtns/AddBtn';
 import DeleteBtn from './EditBtns/DeleteBtn';
 
+const { m } = themes.indents;
+
 const ElementEditBar = () => {
+  const { pathname } = useLocation();
   const { elementTrash } = useElements();
   const { activeCluster } = useClusters();
 
@@ -13,16 +19,17 @@ const ElementEditBar = () => {
   const isAddBtn = activeCluster ? ' 1fr' : '';
   const gtc = isDeleteBtn + isAddBtn;
 
+  if (!pathname.includes('/element')) return;
   return (
     <GridWrap
-      $m="15px 15px"
-      $pos="absolute"
-      $side="right"
+      $m={`${m} ${m}`}
+      $pos="fixed"
+      $side="left"
       $high="bottom"
       $gtc={gtc}
     >
-      {isDeleteBtn && <DeleteBtn />}
       {isAddBtn && <AddBtn />}
+      {isDeleteBtn && <DeleteBtn />}
     </GridWrap>
   );
 };
