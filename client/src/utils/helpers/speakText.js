@@ -36,12 +36,12 @@ const markAsRead = (current, next) => {
       const prePrevActiveEl = prevActiveEl?.previousElementSibling;
       if (activeEl?.innerText.includes(currentMsg)) {
         el.style.color = black;
-        el.style.fontSize = '32px';
+        el.style.fontSize = '36px';
         // set lightened text
         if (currentMsg?.startsWith(' ') || nextMsg?.startsWith(' ')) {
           el.style.display = 'inline';
-          const lightenedEl = `<span style="color: ${smokeBlack}; background-color: ${lightYellow}; border-radius: 4px;">${currentMsg} </span>`;
-          el.innerHTML = el.innerText.replace(currentMsg, lightenedEl);
+          const lightenedEl = `<span style="color: ${smokeBlack}; background-color: ${lightYellow}; border-radius: 4px;">${currentMsg.trim()}</span>`;
+          el.innerHTML = el.innerText.replace(currentMsg, ' ' + lightenedEl);
         }
         // set element styles
         if (el.nextElementSibling && el.nextElementSibling.nextElementSibling) {
@@ -259,7 +259,7 @@ export const speakTranslation = ({ text, lang, rate, divider, setLiColor }) => {
         messageParts[currentIndex - 1].endsWith('!') ||
         messageParts[currentIndex - 1].endsWith('?')
           ? 60
-          : 180;
+          : 160;
       const transLang = currentMsg.split('@±@')[1]?.substring(0, 2);
       const voicesT = speech
         .getVoices()
