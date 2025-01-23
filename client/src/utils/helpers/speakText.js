@@ -131,7 +131,7 @@ export const speakText = ({ text, lang, rate, divider, setLiColor }) => {
       (el.endsWith(',') || el.includes(',@±@')) &&
       (currentElLength <= 3 ||
         nextElLength <= 3 ||
-        currentElLength + nextElLength <= 11)
+        currentElLength + nextElLength <= 12)
     ) {
       const unitedEl = el.includes(',@±@')
         ? el.substring(0, el.length - 5) + arr[i + 1]
@@ -243,6 +243,8 @@ export const speakTranslation = ({ text, lang, rate, divider, setLiColor }) => {
   translation.text = currentMsg.split('@±@')[1].substring(2);
   // mark current message
   message.onstart = () => {
+    // console.log('2');
+    refreshPlaylist();
     markAsRead(message.text);
     if (currentIndex === messageParts.length - 1) {
       setLiColor(white);
@@ -260,6 +262,7 @@ export const speakTranslation = ({ text, lang, rate, divider, setLiColor }) => {
         messageParts[currentIndex - 1].endsWith('?')
           ? 60
           : 160;
+
       const transLang = currentMsg.split('@±@')[1]?.substring(0, 2);
       const voicesT = speech
         .getVoices()
@@ -276,6 +279,8 @@ export const speakTranslation = ({ text, lang, rate, divider, setLiColor }) => {
 
       setTimeout(() => {
         if (currentIndex < messageParts.length - 1) {
+          // console.log('1');
+          markAsRead(translation.text);
           speech.speak(translation);
         }
         speech.speak(message);
@@ -287,6 +292,8 @@ export const speakTranslation = ({ text, lang, rate, divider, setLiColor }) => {
     speech.cancel();
     setLiColor(white);
   } else {
+    // console.log('0');
+    markAsRead(translation.text);
     speech.speak(translation);
     speech.speak(message);
   }
