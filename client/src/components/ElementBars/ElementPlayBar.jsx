@@ -59,9 +59,9 @@ const ElementPlayBar = ({ className, filtredElements, setLiColor }) => {
       ) {
         textString += setPauseDivider(part, divider)
           // abbreviations
-          .replaceAll('Mr.', 'mister')
-          .replaceAll('Ms.', 'miss')
-          .replaceAll('Mrs.', 'missis')
+          .replaceAll('Mr.', 'misteR')
+          .replaceAll('Ms.', 'misS')
+          .replaceAll('Mrs.', 'missiS')
           // punctuation
           .replaceAll('...', `__${divider}`)
           .replaceAll('.', `.${divider}`)
@@ -154,7 +154,7 @@ const ElementPlayBar = ({ className, filtredElements, setLiColor }) => {
         const normalElement = setPauseDivider(element, '');
         const normalCaption = caption.includes(' [')
           ? caption.substring(0, caption.indexOf(' ['))
-          : caption;
+          : setPauseDivider(caption, '');
         textString += normalElement + `@±@${lang}` + normalCaption + divider;
       }
     }
