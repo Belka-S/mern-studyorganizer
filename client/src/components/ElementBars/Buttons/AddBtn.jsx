@@ -10,6 +10,8 @@ import {
   writeClipboard,
   normalizeClipboard,
   translateText,
+  scrollOnBottom,
+  trimChar,
 } from 'utils/helpers';
 import { addElementThunk } from 'store/element/elementThunks';
 import { useAuth, useClusters } from 'utils/hooks';
@@ -25,34 +27,32 @@ const AddBtn = () => {
   useEffect(() => {
     const handleKeyDown = async e => {
       if (e.key === 'e' && e.metaKey) {
-        e.prevent;
+        e.preventDefault();
         await addElement();
       }
     };
-
     addEventListener('keydown', handleKeyDown);
     return () => {
       removeEventListener('keydown', handleKeyDown);
     };
   }, []);
 
-  const scrollOnBottom = () => {
-    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-  };
-
   const addElement = async e => {
     const text = window.getSelection().toString();
     text && (await writeClipboard(text));
     // document.execCommand('copy');
     const clipboardText = await readClipboard();
-    const element = normalizeClipboard(clipboardText, activeCluster.lang)
+    let element = normalizeClipboard(clipboardText, activeCluster.lang)
       .split(/\s+/)
       .join(' ')
       .replaceAll('\n', ' ')
       .trim();
-
+    // Normalize element
+    element = trimChar(element, ',');
     const translation = { from: activeCluster.lang, to: user.lang };
-    const caption = await translateText(element, translation, user.engine);
+    let caption = await translateText(element, translation, user.engine);
+    // Normalize caption
+    caption = trimChar(caption.trim(), ',');
     const { _id } = activeCluster;
     try {
       const mediaEl = { cluster: _id, element: '[]', caption: element };
@@ -69,7 +69,7 @@ const AddBtn = () => {
         .then(() => e?.target && scrollOnBottom())
         .finally(() => e?.target?.blur());
     } catch (err) {
-      e?.target?.blur();
+      e?.currentTarget.blur();
       toast.error(`Invalid element, ${err.message}`);
     }
   };

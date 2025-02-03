@@ -6,8 +6,7 @@ import { useAuth, useClusters, useElements } from 'utils/hooks';
 import { speakText, speakTranslation } from 'utils/helpers';
 import { themes } from 'styles/themes';
 import GridWrap from 'components/shared/GridWrap/GridWrap';
-
-import RefreshBtn from './Buttons/RefreshBtn';
+import RefreshBtn from 'components/shared/Button/RefreshBtn';
 
 const { background } = themes.colors;
 const { button } = themes.shadows;
@@ -118,8 +117,7 @@ const ElementPlayBar = ({ className, filtredElements, setLiColor }) => {
       lang: ac.lang,
       rate: ac.rate,
     });
-
-    e.target.blur();
+    e.currentTarget.blur();
     msg && toast.error(msg);
   };
 
@@ -138,7 +136,7 @@ const ElementPlayBar = ({ className, filtredElements, setLiColor }) => {
       lang: captionLang,
       rate: user.rate,
     });
-    e.target.blur();
+    e.currentTarget.blur();
     msg && toast.error(msg);
   };
 
@@ -168,8 +166,7 @@ const ElementPlayBar = ({ className, filtredElements, setLiColor }) => {
       lang: ac.lang,
       rate: user.rate,
     });
-
-    e.target.blur();
+    e.currentTarget.blur();
     msg && toast.error(msg);
   };
 
