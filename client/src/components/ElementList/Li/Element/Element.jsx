@@ -42,7 +42,7 @@ const Element = ({ el, sortByDate, setSortByDate, setLiColor }) => {
         .replaceAll(',', `,${divider}`)
         .replaceAll('!', `!${divider}`)
         .replaceAll('?', `?${divider}`)
-        .replaceAll(': ', `:${divider} `);
+        .replaceAll(':', `:${divider}`);
       // numbers
       if (activeCluster.lang.includes('de')) {
         textString = textString
@@ -64,26 +64,29 @@ const Element = ({ el, sortByDate, setSortByDate, setLiColor }) => {
       ? textString
       : textString.substring(0, textString.indexOf('[')) + divider;
   };
+
   const speakElement = e => {
+    e.currentTarget.blur();
     const msg = speakText({
       setLiColor,
       divider,
+      voices: window.speechSynthesis.getVoices(),
       text: getTextString(element, divider),
       lang: activeCluster.lang,
       rate: activeCluster.rate,
     });
-    e.currentTarget.blur();
     msg && toast.error(msg);
   };
   const speakCaption = e => {
+    e.currentTarget.blur();
     const msg = speakText({
       setLiColor,
       divider,
+      voices: window.speechSynthesis.getVoices(),
       text: getTextString(caption, divider),
       lang: el.lang,
       rate: user.rate,
     });
-    e.currentTarget.blur();
     msg && toast.error(msg);
   };
 

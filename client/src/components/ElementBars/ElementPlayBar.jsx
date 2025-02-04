@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 
 import Button from 'components/shared/Button/Button';
@@ -16,6 +17,21 @@ const ElementPlayBar = ({ className, filtredElements, setLiColor }) => {
   const { user } = useAuth();
   const { activeCluster: ac } = useClusters();
   const { activeElement: ae } = useElements();
+  const [voices, setVoices] = useState(null);
+
+  useEffect(() => {
+    const voices = window.speechSynthesis.getVoices();
+    if (Array.isArray(voices) && voices.length > 0) {
+      setVoices(voices);
+    }
+    if ('onvoiceschanged' in window.speechSynthesis) {
+      window.speechSynthesis.onvoiceschanged = () => {
+        const voices = window.speechSynthesis.getVoices();
+        setVoices(voices);
+      };
+    }
+  }, []);
+  if (!Array.isArray(voices) || voices.length === 0) return;
 
   const getLanguage = arr => {
     if (!arr.length) return;
@@ -49,7 +65,7 @@ const ElementPlayBar = ({ className, filtredElements, setLiColor }) => {
     let textString = '';
     for (let i = 0; i < playList.length; i += 1) {
       let part = playList[i][text];
-
+      const ld = `@±@${playList[i].lang}${divider}`;
       if (
         part.endsWith('.') ||
         part.endsWith('!') ||
@@ -62,12 +78,12 @@ const ElementPlayBar = ({ className, filtredElements, setLiColor }) => {
           .replaceAll('Ms.', 'misS')
           .replaceAll('Mrs.', 'missiS')
           // punctuation
-          .replaceAll('...', `__${divider}`)
-          .replaceAll('.', `.${divider}`)
-          .replaceAll(',', `,${divider}`)
-          .replaceAll('!', `!${divider}`)
-          .replaceAll('?', `?${divider}`)
-          .replaceAll(': ', `:${divider} `);
+          .replaceAll('...', text !== 'caption' ? `__${divider}` : `__${ld}`)
+          .replaceAll('.', text !== 'caption' ? `.${divider}` : `.${ld}`)
+          .replaceAll(',', text !== 'caption' ? `,${divider}` : `,${ld}`)
+          .replaceAll('!', text !== 'caption' ? `!${divider}` : `!${ld}`)
+          .replaceAll('?', text !== 'caption' ? `?${divider}` : `?${ld}`)
+          .replaceAll(':', text !== 'caption' ? `:${divider}` : `:${ld}`);
         // numbers
         if (ac.lang.includes('de')) {
           textString = textString
@@ -82,13 +98,6 @@ const ElementPlayBar = ({ className, filtredElements, setLiColor }) => {
             .replaceAll(`8.${divider}`, '8.')
             .replaceAll(`9.${divider}`, '9.');
         }
-        // define language
-        textString = textString.replaceAll(
-          `${divider}`,
-          text === 'caption'
-            ? `@±@${playList[i].lang}${divider}`
-            : `${divider}`,
-        );
       } else if (!playList[i].element.startsWith('[')) {
         if (text === 'caption') {
           if (part.includes(' [')) {
@@ -99,10 +108,13 @@ const ElementPlayBar = ({ className, filtredElements, setLiColor }) => {
         textString += part + divider;
       }
     }
+
     return textString;
   };
 
+  const availableVoices = voices;
   const playElements = e => {
+    e.currentTarget.blur();
     setLiColor(background);
     const divider = '$*@';
     const index = filtredElements.findIndex(
@@ -113,15 +125,16 @@ const ElementPlayBar = ({ className, filtredElements, setLiColor }) => {
     const msg = speakText({
       setLiColor,
       divider,
+      voices: availableVoices,
       text: getTextString({ text: 'element', playList, divider }),
       lang: ac.lang,
       rate: ac.rate,
     });
-    e.currentTarget.blur();
     msg && toast.error(msg);
   };
 
   const playCaptions = e => {
+    e.currentTarget.blur();
     const divider = '$*@';
     setLiColor(background);
     const index = filtredElements.findIndex(
@@ -132,15 +145,16 @@ const ElementPlayBar = ({ className, filtredElements, setLiColor }) => {
     const msg = speakText({
       setLiColor,
       divider,
+      voices: availableVoices,
       text: getTextString({ text: 'caption', playList, divider }),
       lang: captionLang,
       rate: user.rate,
     });
-    e.currentTarget.blur();
     msg && toast.error(msg);
   };
 
   const playAll = e => {
+    e.currentTarget.blur();
     setLiColor(background);
     let textString = '';
     const divider = '$*@';
@@ -162,11 +176,11 @@ const ElementPlayBar = ({ className, filtredElements, setLiColor }) => {
     const msg = speakTranslation({
       setLiColor,
       divider,
+      voices: availableVoices,
       text: textString,
       lang: ac.lang,
       rate: user.rate,
     });
-    e.currentTarget.blur();
     msg && toast.error(msg);
   };
 
