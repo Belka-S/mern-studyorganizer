@@ -46,8 +46,11 @@
 - **[lint-images]**https://ausi.github.io/respimagelint/
 - **[@svgr/webpack]**https://www.npmjs.com/package/@svgr/webpack
 - **[react-speech-kit]**https://github.com/MikeyParton/react-speech-kit?tab=readme-ov-file
-- **[]**
-- **[]**
+- **[sentence-cleaner]**https://www.npmjs.com/package/sentence-cleaner
+- **[punctuation-name2symbol]**https://github.com/johnwcallahan/punctuation-name2symbol
+- **[react-oauth]**https://github.com/MomenSherif/react-oauth
+- **[react-oauth]**https://github.com/MomenSherif/react-oauth/issues/12
+- **[pdf24]**https://tools.pdf24.org/en/ocr-pdf#s=1706141238718
 - **[]**
 - **[]**
 - **[]**
@@ -56,6 +59,7 @@
 - **[chardet]**https://www.npmjs.com/package/chardet
 - **[gdriveApi]**https://developers.google.com/drive/api/reference/rest/v3/drives/list?hl=ru
 - **[node-cron]**https://www.npmjs.com/package/node-cron
+- **[google-api-nodejs-client]**https://github.com/googleapis/google-api-nodejs-client
 - **[]**
 - **[]**
 - **[]**
@@ -65,6 +69,3 @@
 - **[]**
 - **[]**
 - **[]**
-- **[]**
-
-- **[pdf24]**https://tools.pdf24.org/en/ocr-pdf#s=1706141238718
