@@ -115,8 +115,13 @@ const Element = ({ el, sortByDate, setSortByDate, setLiColor }) => {
   // Pllay Google Drive media
   const googleLogin = useGoogleLogin({
     onSuccess: res => {
+      const { access_token, expires_in } = res;
+      const googleToken = {
+        accessToken: access_token,
+        expiresIn: expires_in * 1000 + Date.now(),
+      };
       // const userInfo = await axios.get('https://www.googleapis.com/oauth2/v3/userinfo', { headers: { Authorization: `Bearer ${res.access_token}` }, }).then(res => res.data);
-      dispatch(setGoogleToken(res.access_token));
+      dispatch(setGoogleToken(googleToken));
     },
     onError: err => toast(err.message),
   });
@@ -132,6 +137,8 @@ const Element = ({ el, sortByDate, setSortByDate, setLiColor }) => {
     setBlobUrl(blobUrl);
   };
 
+  const isToken = Date.now() < user?.googleToken?.expiresIn;
+
   return (
     <>
       <GridWrap onClick={handleSetActiveElement}>
@@ -140,8 +147,8 @@ const Element = ({ el, sortByDate, setSortByDate, setLiColor }) => {
         <Divider
           onClick={
             el.element.startsWith('[')
-              ? user.googleToken
-                ? () => playGdriveFile(user.googleToken)
+              ? isToken
+                ? () => playGdriveFile(user.googleToken.accessToken)
                 : () => googleLogin()
               : handleSort
           }
@@ -149,8 +156,26 @@ const Element = ({ el, sortByDate, setSortByDate, setLiColor }) => {
         {caption.text && (
           <SpeakBtn onClick={speakCaption}>{caption.text}</SpeakBtn>
         )}
-        {blobUrl && <Audio src={blobUrl} controls />}
-        {!blobUrl && caption.link && <Iframe src={caption.link} />}
+
+        {(!blobUrl || !isToken) && caption.link && (
+          <Iframe src={caption.link} />
+        )}
+        {caption?.link?.endsWith('.mp3') && (
+          <Audio
+            onPause={e => e.target.blur()}
+            onEnded={e => e.target.blur()}
+            src={caption.link}
+            controls
+          />
+        )}
+        {blobUrl && isToken && (
+          <Audio
+            onPause={e => e.target.blur()}
+            onEnded={e => e.target.blur()}
+            src={blobUrl}
+            controls
+          />
+        )}
       </GridWrap>
     </>
   );

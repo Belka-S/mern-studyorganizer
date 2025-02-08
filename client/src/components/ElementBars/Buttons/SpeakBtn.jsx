@@ -1,9 +1,11 @@
+import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
 
 import 'regenerator-runtime/runtime';
 import SpeechRecognition, {
   useSpeechRecognition,
 } from 'react-speech-recognition';
+import classNames from 'classnames';
 
 import { TbMicrophone } from 'react-icons/tb';
 import { BsStopFill } from 'react-icons/bs';
@@ -20,7 +22,7 @@ import { themes } from 'styles/themes';
 const { button } = themes.shadows;
 const { m, xl } = themes.indents;
 
-const SpeakBtn = () => {
+const SpeakBtn = ({ className }) => {
   const { user } = useAuth();
   const [isForm, setIsForm] = useState(false);
   const { activeCluster } = useClusters();
@@ -72,22 +74,15 @@ const SpeakBtn = () => {
       removeEventListener('keydown', handleKeyDown);
     };
   }, [isForm, listening, punctuatedTranscript, resetTranscript]);
-  // Start/Stop recording by cmd+R/ Finish escape/enter
+  // Start/Stop recording by cmd+R/F2
   useEffect(() => {
     const handleKeyDown = async e => {
-      // Finish
-      if (e.ctrlKey && e.key === 'Escape') {
-        e.preventDefault();
-        SpeechRecognition.stopListening();
-        setIsForm(false);
-        setRecording('');
-        setTranslation('');
-        resetTranscript();
-        return;
-      }
+      const rec =
+        e.key === 'F2' ||
+        (e.key === 'r' && e.metaKey && !e.altKey && !e.shiftKey);
       // Start
       if (!listening) {
-        if (e.metaKey && e.key === 'r' && !e.altKey && !e.shiftKey) {
+        if (rec) {
           e.preventDefault();
           setIsForm(true);
           SpeechRecognition.startListening({
@@ -98,7 +93,7 @@ const SpeakBtn = () => {
       }
       // Stop
       if (listening) {
-        if (e.metaKey && e.key === 'r' && !e.altKey && !e.shiftKey) {
+        if (rec) {
           e.preventDefault();
           SpeechRecognition.stopListening();
           // Finalisation after stop
@@ -131,6 +126,25 @@ const SpeakBtn = () => {
     user.engine,
     user.lang,
   ]);
+  // Finish escape/enter
+  useEffect(() => {
+    const handleKeyUp = async e => {
+      if (e.key === 'Escape' || e.key === 'Enter' || e.key === 'F1') {
+        e.preventDefault();
+        SpeechRecognition.stopListening();
+        setIsForm(false);
+        setRecording('');
+        setTranslation('');
+        resetTranscript();
+        return;
+      }
+    };
+    addEventListener('keyup', handleKeyUp);
+    return () => {
+      removeEventListener('keyup', handleKeyUp);
+    };
+  }, [resetTranscript]);
+
   // https://www.google.com/intl/en/chrome/demos/speech.html
   if (!browserSupportsSpeechRecognition || !isMicrophoneAvailable) return;
 
@@ -159,7 +173,7 @@ const SpeakBtn = () => {
   };
 
   return (
-    <>
+    <div className={classNames(className, 'speak-btn', !isForm && 'hidden')}>
       <Button onClick={toggleRecognition} $s="m" $round={true} $bs={button}>
         {!listening ? <TbMicrophone size={18} /> : <BsStopFill size={18} />}
       </Button>
@@ -181,8 +195,12 @@ const SpeakBtn = () => {
           />
         </Modal>
       )}
-    </>
+    </div>
   );
 };
 
 export default SpeakBtn;
+
+SpeakBtn.propTypes = {
+  className: PropTypes.string,
+};

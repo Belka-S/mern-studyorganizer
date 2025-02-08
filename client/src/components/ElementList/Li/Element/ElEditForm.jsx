@@ -71,6 +71,7 @@ const ElementEditForm = ({ el, setIsForm, setRecording, setTranslation }) => {
     }
   }, [article, element, setFocus, setValue]);
 
+  // Set key controle
   useEffect(() => {
     const handleKeyDown = async e => {
       if (e.code === 'NumpadAdd') {
@@ -78,7 +79,7 @@ const ElementEditForm = ({ el, setIsForm, setRecording, setTranslation }) => {
         await translateElement(user.engine);
         handleSubmit(onSubmit)();
       }
-      if (e.key === 'Enter') {
+      if (e.key === 'Enter' || e.key === 'F1') {
         e.preventDefault();
         handleSubmit(onSubmit)();
       }
@@ -90,7 +91,6 @@ const ElementEditForm = ({ el, setIsForm, setRecording, setTranslation }) => {
         elementRef.current.focus();
       }
     };
-
     addEventListener('keydown', handleKeyDown);
     return () => {
       removeEventListener('keydown', handleKeyDown);
