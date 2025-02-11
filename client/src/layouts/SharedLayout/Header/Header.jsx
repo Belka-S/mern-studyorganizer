@@ -109,7 +109,10 @@ const Header = ({ $height, barW, setBarW }) => {
           {isLoggedIn && (
             <NavLink
               to="/gdrive"
-              onClick={() => dispatch(updateUserThunk({ clusterSelect }))}
+              onClick={() => {
+                if (!pathname.includes('/element'))
+                  dispatch(updateUserThunk({ clusterSelect }));
+              }}
             >
               <FcGoogle size="17px" />
               Drive
@@ -118,7 +121,10 @@ const Header = ({ $height, barW, setBarW }) => {
           {isLoggedIn && (
             <NavLink
               to="/cluster"
-              onClick={() => dispatch(updateUserThunk({ gdriveSelect }))}
+              onClick={() => {
+                if (!pathname.includes('/element'))
+                  dispatch(updateUserThunk({ gdriveSelect }));
+              }}
             >
               Cluster
             </NavLink>
