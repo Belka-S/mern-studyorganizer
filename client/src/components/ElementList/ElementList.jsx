@@ -22,11 +22,11 @@ const ElementList = () => {
   const dispatch = useDispatch();
   const { ref, inView, entry } = useInView({
     initialInView: true,
-    rootMargin: '0px 0px -30px 0px',
+    rootMargin: '0px 0px 110px 0px',
   });
-  // const { user } = useAuth();
   const { activeCluster } = useClusters();
-  const { allElements, elementTrash, elementFilter, isLoading } = useElements();
+  const { allElements, activeElement, elementTrash, elementFilter, isLoading } =
+    useElements();
 
   const [liColor, setLiColor] = useState(white);
   const [editCount, setEditCount] = useState(0);
@@ -35,22 +35,29 @@ const ElementList = () => {
   let { elementSelect } = useElements();
   elementSelect = !elementSelect ? [] : elementSelect;
 
+  // Scroll on activeElement
   useEffect(() => {
     if (!activeCluster) return;
-    dispatch(fetchElementsThunk({ cluster: activeCluster._id }))
-      .unwrap()
-      .then(({ result }) => {
-        if (!activeCluster.activeEl) return;
-        const activeEl = result.elements.find(
-          ({ _id }) => _id === activeCluster.activeEl,
-        );
-        dispatch(setActiveElement(activeEl));
-      })
-      .then(() => {
-        const activeDomEl = document.getElementById('active-element');
-        activeDomEl && scrollOnDomEl(activeDomEl);
-      });
-  }, [activeCluster, dispatch]);
+
+    const scrollOnActiveEl = () => {
+      const activeDomEl = document.getElementById('active-element');
+      activeDomEl && scrollOnDomEl(activeDomEl);
+    };
+    if (activeElement?._id === activeCluster.activeEl) {
+      scrollOnActiveEl();
+    } else {
+      dispatch(fetchElementsThunk({ cluster: activeCluster._id }))
+        .unwrap()
+        .then(({ result }) => {
+          if (!activeCluster.activeEl) return;
+          const activeEl = result.elements.find(
+            ({ _id }) => _id === activeCluster.activeEl,
+          );
+          dispatch(setActiveElement(activeEl));
+        })
+        .then(() => scrollOnActiveEl());
+    }
+  }, []);
 
   // Set selection mode
   useEffect(() => {
@@ -144,14 +151,13 @@ const ElementList = () => {
             selectMode={selectMode}
           />
         ))}
-
         <div ref={ref}>
           <ElementLangBar />
           <ElementEditBar
-            className={!inView || !isScrollable ? 'shown' : 'hidden'}
+            className={inView && isScrollable ? 'el_bar-up' : 'el_bar-down'}
           />
           <ElementPlayBar
-            className={!inView || !isScrollable ? 'shown' : 'hidden'}
+            className={inView && isScrollable ? 'el_bar-up' : 'el_bar-down'}
             filtredElements={filtredElements}
             setLiColor={setLiColor}
           />
